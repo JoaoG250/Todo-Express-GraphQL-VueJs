@@ -9,6 +9,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@vue/apollo-composable": "^4.0.0-alpha.16",
+    "graphql": "^16.3.0",
+    "graphql-tag": "^2.12.6",
     "pinia": "^2.0.13",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
