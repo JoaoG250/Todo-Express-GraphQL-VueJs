@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
+import { darkTheme, NConfigProvider, NGlobalStyle } from "naive-ui";
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <n-config-provider :theme="darkTheme">
+    <n-global-style />
+    <RouterView />
+  </n-config-provider>
 </template>
 
 <style>
