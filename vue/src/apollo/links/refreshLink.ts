@@ -9,7 +9,7 @@ import {
   setRefreshToken,
 } from "@/common/auth";
 import type { FetchResult } from "@apollo/client";
-import type { RefreshMutationResponse } from "../mutations/auth";
+import type { RefreshMutationResult } from "../mutations/auth";
 
 const refreshLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
@@ -23,7 +23,7 @@ const refreshLink = new TokenRefreshLink({
     if (!token) return true;
 
     // Otherwise, we check if the token is expired
-    const claims: JwtPayload = decodeJWT(token);
+    const claims = decodeJWT<JwtPayload>(token);
 
     if (!claims.exp) return true;
 
@@ -63,7 +63,7 @@ const refreshLink = new TokenRefreshLink({
     setAccessToken(accessToken);
   },
   handleResponse:
-    () => (response: FetchResult<RefreshMutationResponse> | null) => {
+    () => (response: FetchResult<RefreshMutationResult> | null) => {
       if (!response?.data) {
         throw new Error("Response does not contain data");
       }

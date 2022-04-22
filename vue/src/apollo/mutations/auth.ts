@@ -9,11 +9,16 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
-export interface LoginMutationResponse {
+export interface LoginMutationResult {
   login: {
     accessToken: string;
     refreshToken: string;
   };
+}
+
+export interface LoginMutationVariables {
+  email: string;
+  password: string;
 }
 
 export const REGISTER_MUTATION = gql`
@@ -22,11 +27,17 @@ export const REGISTER_MUTATION = gql`
   }
 `;
 
-export interface RegisterMutationResponse {
+export interface RegisterMutationResult {
   register: boolean;
 }
 
-export interface RefreshMutationResponse {
+export interface RegisterMutationVariables {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface RefreshMutationResult {
   refreshToken: {
     accessToken: string;
     refreshToken: string;

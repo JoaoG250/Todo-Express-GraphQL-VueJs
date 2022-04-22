@@ -10,7 +10,7 @@ export const ME_QUERY = gql`
   }
 `;
 
-export interface MeQueryResponse {
+export interface MeQueryResult {
   me: {
     id: string;
     name: string;
