@@ -1,21 +1,15 @@
 <script setup lang="ts">
 import { NCollapse } from "naive-ui";
-import type { PageInfo } from "@/common/types";
-import type { TodoEdge } from "@/models/todo";
+import type { Todo } from "@/models/todo";
 import TodoListItem from "./TodoListItem.vue";
 
-defineProps<{
-  todos: {
-    pageInfo: PageInfo;
-    edges: TodoEdge[];
-  };
-}>();
+defineProps<{ todos: Todo[] }>();
 </script>
 
 <template>
   <n-collapse accordion>
-    <template v-for="edge in todos.edges" :key="edge.node">
-      <TodoListItem :todo="edge.node" />
+    <template v-for="todo in todos" :key="todo.id">
+      <TodoListItem :todo="todo" />
     </template>
   </n-collapse>
 </template>

@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("auth", () => {
     refreshToken: getRefreshToken(),
   });
 
-  onMounted(async () => {
+  onMounted(() => {
     if (state.accessToken) {
       const { onResult } = useQuery<MeQueryResult>(ME_QUERY);
       onResult((result) => {
@@ -87,7 +87,6 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     state,
     getters: {
-      user: () => state.user,
       loggedIn: () => !!state.user,
     },
     actions: {

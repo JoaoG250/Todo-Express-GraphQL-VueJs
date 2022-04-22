@@ -1,38 +1,21 @@
 <script setup lang="ts">
-import { useQuery } from "@vue/apollo-composable";
-import { onMounted, ref } from "vue";
-import {
-  TODOS_QUERY,
-  type TodosQueryResult,
-  type TodosQueryVariables,
-} from "@/apollo/queries/todo";
-import type { PageInfo } from "@/common/types";
-import type { TodoEdge } from "@/models/todo";
+import { onMounted } from "vue";
+import { useTodoStore } from "@/stores/todo";
+import { computed } from "@vue/reactivity";
 import TodoList from "../components/todo/TodoList.vue";
 
-const todos = ref<
-  | {
-      pageInfo: PageInfo;
-      edges: TodoEdge[];
-    }
-  | undefined
->(undefined);
+const todoStore = useTodoStore();
+const todos = computed(() => todoStore.state.todos);
 
 onMounted(() => {
-  const { onResult } = useQuery<TodosQueryResult, TodosQueryVariables>(
-    TODOS_QUERY,
-    { first: 10 }
-  );
-  onResult((result) => {
-    todos.value = result.data.todos;
-  });
+  todoStore.actions.fetchTodos();
 });
 </script>
 
 <template>
   <main>
     <h1>Home View</h1>
-    <p v-if="todos">
+    <p v-if="todos.length">
       <TodoList :todos="todos" />
     </p>
   </main>
