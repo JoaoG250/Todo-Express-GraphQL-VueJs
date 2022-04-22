@@ -1,7 +1,10 @@
 import {
   LOGIN_MUTATION,
+  REGISTER_MUTATION,
   type LoginMutationResult,
   type LoginMutationVariables,
+  type RegisterMutationResult,
+  type RegisterMutationVariables,
 } from "@/apollo/mutations/auth";
 import { ME_QUERY, type MeQueryResult } from "@/apollo/queries/auth";
 import {
@@ -16,7 +19,6 @@ import type { User } from "@/models/user";
 import { useMutation, useQuery, useResult } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
 import { onMounted, reactive } from "vue";
-import { useRouter } from "vue-router";
 
 interface AuthStoreState {
   user: User | null;
@@ -25,7 +27,6 @@ interface AuthStoreState {
 }
 
 export const useAuthStore = defineStore("auth", () => {
-  const router = useRouter();
   const state = reactive<AuthStoreState>({
     user: null,
     accessToken: getAccessToken(),
@@ -73,11 +74,28 @@ export const useAuthStore = defineStore("auth", () => {
     };
   }
 
+  async function register(data: {
+    name: string;
+    email: string;
+    password: string;
+  }) {
+    const { mutate } = useMutation<
+      RegisterMutationResult,
+      RegisterMutationVariables
+    >(REGISTER_MUTATION, { variables: data });
+    const response = await mutate();
+
+    if (!response?.data) {
+      throw new Error("Register failed");
+    }
+
+    return response.data.register;
+  }
+
   async function logout() {
     deleteAccessToken();
     deleteRefreshToken();
     state.user = null;
-    await router.push("/");
   }
 
   function setUser(user: User) {
@@ -91,6 +109,7 @@ export const useAuthStore = defineStore("auth", () => {
     },
     actions: {
       login,
+      register,
       logout,
       setUser,
     },

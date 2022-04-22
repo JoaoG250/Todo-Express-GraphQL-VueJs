@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { h } from "vue";
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView, useRouter } from "vue-router";
 import type { MenuOption } from "naive-ui";
 import { NLayoutHeader, NText, NMenu, NButton } from "naive-ui";
+import { useAuthStore } from "@/stores/auth";
 
+const router = useRouter();
+const authStore = useAuthStore();
 const menuOptions: MenuOption[] = [
   {
     key: "home",
@@ -17,6 +20,11 @@ const menuOptions: MenuOption[] = [
     to: "/auth/login",
   },
 ];
+
+async function handleLogout() {
+  await authStore.actions.logout();
+  await router.push({ name: "auth:login" });
+}
 </script>
 
 <template>
@@ -28,9 +36,7 @@ const menuOptions: MenuOption[] = [
       <n-menu :options="menuOptions" mode="horizontal" />
     </div>
     <div class="nav-end">
-      <RouterLink to="/auth/login">
-        <NButton>Login</NButton>
-      </RouterLink>
+      <NButton @click="handleLogout">Logout</NButton>
     </div>
   </n-layout-header>
   <div class="main-container">

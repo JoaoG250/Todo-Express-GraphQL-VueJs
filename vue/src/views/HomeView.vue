@@ -14,9 +14,8 @@ onMounted(() => {
 
 <template>
   <main>
-    <h1>Home View</h1>
-    <p v-if="todos.length">
+    <div v-if="todos.length">
       <TodoList :todos="todos" />
-    </p>
+    </div>
   </main>
 </template>

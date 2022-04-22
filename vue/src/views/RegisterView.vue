@@ -7,25 +7,28 @@ import { useAuthStore } from "@/stores/auth";
 const router = useRouter();
 const authStore = useAuthStore();
 const form = reactive({
+  name: "",
   email: "",
   password: "",
 });
 
-async function handleLogin() {
+async function handleRegister() {
   const data = {
+    name: form.name,
     email: form.email,
     password: form.password,
   };
-  await authStore.actions.login(data);
+  await authStore.actions.register(data);
 
-  await router.push({ name: "home:index" });
+  await router.push({ name: "auth:login" });
 }
 </script>
 
 <template>
   <div>
-    <h1>Login</h1>
+    <h1>Register</h1>
     <n-space vertical>
+      <n-input v-model:value="form.name" type="text" placeholder="User name" />
       <n-input
         v-model:value="form.email"
         type="text"
@@ -38,10 +41,10 @@ async function handleLogin() {
         placeholder="Password"
       />
 
-      <NButton @click="handleLogin">Login</NButton>
+      <NButton @click="handleRegister">Register</NButton>
       <span>
-        Don't have an account?
-        <RouterLink :to="{ name: 'auth:register' }"> Register </RouterLink>
+        Already have an account?
+        <RouterLink :to="{ name: 'auth:login' }"> Login </RouterLink>
       </span>
       <span>
         Return to
