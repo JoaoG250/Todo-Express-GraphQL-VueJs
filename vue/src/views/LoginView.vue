@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from "vue-router";
-import { NButton, NInput, NSpace } from "naive-ui";
+import { NButton, NInput, NSpace, useMessage } from "naive-ui";
 import { reactive } from "vue";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
+const message = useMessage();
 const authStore = useAuthStore();
 const form = reactive({
   email: "",
@@ -17,7 +18,7 @@ async function handleLogin() {
     password: form.password,
   };
   await authStore.actions.login(data);
-
+  message.success("You have successfully logged in. Welcome back!");
   await router.push({ name: "home:index" });
 }
 </script>

@@ -9,15 +9,31 @@ const router = useRouter();
 const authStore = useAuthStore();
 const menuOptions: MenuOption[] = [
   {
-    key: "home",
-    label: () => h(RouterLink, { to: "/" }, { default: () => "Home" }),
-    to: "/",
+    key: "todo",
+    label: () =>
+      h(
+        RouterLink,
+        { to: { name: "home:index", query: { done: "false" } } },
+        { default: () => "Todo" }
+      ),
   },
   {
-    key: "login",
+    key: "done",
     label: () =>
-      h(RouterLink, { to: "/auth/login" }, { default: () => "Login" }),
-    to: "/auth/login",
+      h(
+        RouterLink,
+        { to: { name: "home:index", query: { done: "true" } } },
+        { default: () => "Done" }
+      ),
+  },
+  {
+    key: "all",
+    label: () =>
+      h(
+        RouterLink,
+        { to: { name: "home:index" } },
+        { default: () => "All todos" }
+      ),
   },
 ];
 
