@@ -6,12 +6,6 @@ import {
   NGlobalStyle,
   NMessageProvider,
 } from "naive-ui";
-import { provideApolloClient } from "@vue/apollo-composable";
-import apolloClient from "./apollo/client";
-import { useAuthStore } from "./stores/auth";
-
-provideApolloClient(apolloClient);
-useAuthStore();
 </script>
 
 <template>

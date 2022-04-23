@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
 import { NEmpty, NButton, NSpace } from "naive-ui";
 import { useTodoStore } from "@/stores/todo";
 import { computed } from "@vue/reactivity";
 import TodoList from "../components/todo/TodoList.vue";
+import TodoModifyModal from "../components/todo/TodoModifyModal.vue";
 
 const todoStore = useTodoStore();
+const { openModal } = todoStore.actions;
 const todos = computed(() => todoStore.state.todos);
-
-onMounted(() => {
-  todoStore.actions.fetchTodos();
-});
 </script>
 
 <template>
   <main>
+    <TodoModifyModal />
     <div v-if="todos.length">
       <n-space :size="30" vertical>
-        <n-button>Create todo</n-button>
+        <n-button @click="openModal()">Create todo</n-button>
         <TodoList :todos="todos" />
       </n-space>
     </div>
