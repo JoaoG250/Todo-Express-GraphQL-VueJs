@@ -47,6 +47,12 @@ watch(
   }
 );
 
+function resetForm() {
+  form.title = "";
+  form.description = "";
+  form.done = false;
+}
+
 async function submit() {
   if (todoStore.state.modalTodo) {
     await todoStore.actions.updateTodo(todoStore.state.modalTodo.id, form);
@@ -58,6 +64,7 @@ async function submit() {
   }
 
   message.success(submitMessage.value);
+  resetForm();
   closeModal();
 }
 </script>

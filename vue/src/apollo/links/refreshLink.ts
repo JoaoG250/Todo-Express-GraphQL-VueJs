@@ -37,7 +37,7 @@ const refreshLink = new TokenRefreshLink({
   fetchAccessToken: async () => {
     const refreshToken = getRefreshToken();
 
-    const request = await fetch("http://localhost:4000/graphql", {
+    const request = await fetch(import.meta.env.VITE_API_URL + "/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -9,7 +9,7 @@ import refreshLink from "./links/refreshLink";
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: "http://localhost:4000/graphql",
+  uri: import.meta.env.VITE_API_URL + "/graphql",
 });
 
 // Cache implementation

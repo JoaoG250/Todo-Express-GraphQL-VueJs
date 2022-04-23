@@ -22,7 +22,9 @@ const todos = computed(() => todoStore.state.todos);
     <div v-else>
       <n-empty description="You do not have any todos">
         <template #extra>
-          <n-button size="small"> Create a new todo </n-button>
+          <n-button size="small" @click="openModal()">
+            Create a new todo
+          </n-button>
         </template>
       </n-empty>
     </div>

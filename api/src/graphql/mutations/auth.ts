@@ -24,7 +24,7 @@ export const authMutations = extendType({
     t.field("refreshToken", {
       type: "AuthTokens",
       args: { refreshToken: stringArg() },
-      async resolve(_root, { refreshToken }, ctx) {
+      resolve(_root, { refreshToken }, ctx) {
         return ctx.authService.refreshToken(refreshToken);
       },
     });
@@ -36,7 +36,7 @@ export const authMutations = extendType({
         email: stringArg(),
         password: stringArg(),
       },
-      async resolve(_root, { name, email, password }, ctx) {
+      resolve(_root, { name, email, password }, ctx) {
         return ctx.authService.register(name, email, password);
       },
     });

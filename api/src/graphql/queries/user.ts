@@ -1,10 +1,11 @@
-import { AuthenticationError } from "apollo-server-express";
-import { extendType } from "nexus";
+import { AuthenticationError, UserInputError } from "apollo-server-express";
+import { extendType, idArg } from "nexus";
+import { parsePaginationArgs } from "../../common/relay";
 
-export const me = extendType({
+export const userQueries = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.field("me", {
+    t.field("me", {
       type: "User",
       async resolve(_root, _args, ctx) {
         if (!ctx.user) {
@@ -18,6 +19,30 @@ export const me = extendType({
         }
 
         return user;
+      },
+    });
+
+    t.field("user", {
+      type: "User",
+      args: {
+        id: idArg(),
+      },
+      async resolve(_root, { id }, ctx) {
+        const user = await ctx.userService.user({ id });
+
+        if (!user) {
+          throw new UserInputError("User not found");
+        }
+
+        return user;
+      },
+    });
+
+    t.connectionField("users", {
+      type: "User",
+      nodes(_root, args, ctx) {
+        const pagination = parsePaginationArgs(args);
+        return ctx.userService.users({ ...pagination });
       },
     });
   },
