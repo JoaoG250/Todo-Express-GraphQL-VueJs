@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:13.2
+    env_file:
+      - ./dotenv/db.env
+
+  redis:
+    image: redis:alpine
+    sysctls:
+      - net.core.somaxconn=511
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: api
+    image: todoapp-api:latest
+    env_file:
+      - ./dotenv/api.env
+    command: development
+    volumes:
+      - ./api:/home/node/todoapp/api
+    ports:
+      - "4000:4000"
+      - "5555:5555" # Prisma studio
+    depends_on:
+      - db
+
+  vue:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: vue
+    image: todoapp-vue:latest
+    env_file:
+      - ./dotenv/vue.env
+    command: development
+    volumes:
+      - ./vue:/home/node/todoapp/vue
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
