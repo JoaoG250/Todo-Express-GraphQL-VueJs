@@ -2,6 +2,23 @@
 ### Do not make changes to this file directly
 
 
+type AuthTokens {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Mutation {
+  login(email: String!, password: String!): AuthTokens!
+  refreshToken(refreshToken: String!): AuthTokens!
+  register(email: String!, name: String!, password: String!): Boolean!
+}
+
 type Query {
-  ok: Boolean!
+  me: User!
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String!
 }

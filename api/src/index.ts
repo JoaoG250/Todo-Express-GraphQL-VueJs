@@ -2,8 +2,9 @@ import config from "config";
 import { ApolloServer } from "apollo-server-express";
 import express, { NextFunction, Request, Response } from "express";
 import { schema } from "./schema";
-import { GraphQLJwtContext } from "./@types";
+import { GraphQLContext, ExpressJwtContext } from "./types";
 import { expressjwt, UnauthorizedError } from "express-jwt";
+import services from "./services";
 
 const accessTokenSecret: string = config.get("jwt.accessTokenSecret");
 
@@ -31,9 +32,10 @@ async function startServer() {
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }: GraphQLJwtContext) => {
+    context: ({ req }: ExpressJwtContext): GraphQLContext => {
       return {
-        user: req.user,
+        user: req.auth,
+        ...services,
       };
     },
   });
