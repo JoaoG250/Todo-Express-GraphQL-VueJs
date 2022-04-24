@@ -18,7 +18,7 @@ import {
 import type { User } from "@/models/user";
 import { useMutation, useQuery, useResult } from "@vue/apollo-composable";
 import { defineStore } from "pinia";
-import { onMounted, reactive } from "vue";
+import { computed, reactive } from "vue";
 
 interface AuthStoreState {
   user: User | null;
@@ -32,23 +32,34 @@ export const useAuthStore = defineStore("auth", () => {
     accessToken: getAccessToken(),
     refreshToken: getRefreshToken(),
   });
+  const loggedIn = computed(() => !!state.accessToken);
+  const { onResult: onFetchResult } = useQuery<MeQueryResult>(ME_QUERY, null, {
+    enabled: loggedIn.value,
+    fetchPolicy: "network-only",
+  });
 
-  onMounted(() => {
-    if (state.accessToken) {
-      const { onResult } = useQuery<MeQueryResult>(ME_QUERY);
-      onResult((result) => {
-        state.user = result.data.me;
-      });
-    }
+  onFetchResult((result) => {
+    state.user = result.data.me;
   });
 
   function setTokens(accessToken: string, refreshToken: string) {
+    state.accessToken = accessToken;
+    state.refreshToken = refreshToken;
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
   }
 
+  function clearTokens() {
+    state.accessToken = undefined;
+    state.refreshToken = undefined;
+    deleteAccessToken();
+    deleteRefreshToken();
+  }
+
   async function fetchUser() {
-    const { result } = useQuery<MeQueryResult>(ME_QUERY);
+    const { result } = useQuery<MeQueryResult>(ME_QUERY, null, {
+      fetchPolicy: "network-only",
+    });
     const user = useResult(result, null, (data) => data.me);
     state.user = user.value;
   }
@@ -93,8 +104,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function logout() {
-    deleteAccessToken();
-    deleteRefreshToken();
+    clearTokens();
     state.user = null;
   }
 
@@ -105,7 +115,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     state,
     getters: {
-      loggedIn: () => !!state.user,
+      loggedIn: () => loggedIn.value,
     },
     actions: {
       login,

@@ -38,18 +38,30 @@ async function handleLogin() {
         type="password"
         placeholder="Password"
       />
-
-      <NButton @click="handleLogin">Login</NButton>
-      <span>
-        Don't have an account?
-        <RouterLink :to="{ name: 'auth:register' }"> Register </RouterLink>
-      </span>
-      <span>
-        Return to
-        <RouterLink :to="{ name: 'home:index' }"> Home </RouterLink>
-      </span>
+      <n-space justify="center">
+        <NButton @click="handleLogin">Login</NButton>
+      </n-space>
+      <n-space class="footer-links" vertical>
+        <span>
+          Don't have an account?
+          <RouterLink :to="{ name: 'auth:register' }"> Register </RouterLink>
+        </span>
+        <span>
+          Return to
+          <RouterLink :to="{ name: 'home:index' }"> Home </RouterLink>
+        </span>
+      </n-space>
     </n-space>
   </div>
 </template>
 
-<style></style>
+<style scoped>
+h1 {
+  text-align: center;
+}
+
+.footer-links {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
